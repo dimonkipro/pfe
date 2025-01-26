@@ -1,0 +1,49 @@
+nav {
+    position: sticky;
+    top: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 999;
+}
+
+
+.logo {
+    width: 4rem;
+}
+
+.right-side {
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+}
+
+.right-side li {
+    margin: auto 1rem;
+}
+
+.input {
+    padding: 10px;
+    width: 7rem;
+    height: fit-content;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    box-shadow: 0 1px gray;
+    font-size: 18px;
+    transition: width 0.3s;
+    font-family: Consolas, monaco, monospace;
+}
+
+.input:focus {
+    outline: 1px solid rgb(123, 123, 123);
+    box-shadow: none;
+    width: 16rem;
+}
+
+.input::placeholder {
+    color: rgb(97, 97, 97);
+}
