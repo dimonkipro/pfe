@@ -7,6 +7,7 @@ const initialState = {
   isCheckingAuth: false,
   message: null,
   error: null,
+  notifications: [], //Types = "error", success", "info", "warning", "default"
 };
 
 const authReducer = (state = initialState, action) => {
@@ -30,10 +31,23 @@ const authReducer = (state = initialState, action) => {
         isAuthenticated: true,
         isLoading: false,
         error: null,
+        notifications: [
+          ...state.notifications,
+          { message: "Login successful!", type: "success" },
+        ],
       };
 
     case types.LOGOUT_SUCCESS:
-      return { ...state, user: null, isAuthenticated: false, isLoading: false };
+      return {
+        ...state,
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        notifications: [
+          ...state.notifications,
+          { message: "Loged out successfully!", type: "info" },
+        ],
+      };
 
     case types.SIGNUP_FAILURE:
     case types.LOGIN_FAILURE:
@@ -42,11 +56,30 @@ const authReducer = (state = initialState, action) => {
     case types.CHECK_AUTH_FAILURE:
     case types.FORGOT_PASSWORD_FAILURE:
     case types.RESET_PASSWORD_FAILURE:
-      return { ...state, isLoading: false, error: action.payload };
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+        notifications: [
+          ...state.notifications,
+          { message: action.payload, type: "error" },
+        ],
+      };
 
     case types.FORGOT_PASSWORD_SUCCESS:
     case types.RESET_PASSWORD_SUCCESS:
-      return { ...state, message: action.payload, isLoading: false };
+      return {
+        ...state,
+        message: action.payload,
+        isLoading: false,
+        notifications: [
+          ...state.notifications,
+          { message: "Password changed successfully", type: "success" },
+        ],
+      };
+
+    case "CLEAR_NOTIFICATIONS":
+      return { ...state, notifications: [] };
 
     default:
       return state;

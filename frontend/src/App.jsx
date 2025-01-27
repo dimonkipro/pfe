@@ -12,6 +12,7 @@ import Header from "./components/Header/Header";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./Redux/Actions/authActions";
+import Spinner from "./components/Spinner";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -43,7 +44,7 @@ function App() {
     checkAuth();
   }, []);
 
-  if (isCheckingAuth) return <p>error</p>;
+  if (isCheckingAuth) return <Spinner load={true} />;
   return (
     <div>
       <Header />
@@ -92,6 +93,14 @@ function App() {
           }
         />
         {/* catch all routes */}
+        <Route
+          path="*"
+          element={
+            <p className="display-1 text-center fw-bold position-absolute top-50 start-50 translate-middle ">
+              (❁´⁔`❁) <br /> 404 Page Not Found
+            </p>
+          }
+        />
       </Routes>
     </div>
   );

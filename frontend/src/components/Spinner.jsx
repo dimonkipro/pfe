@@ -3,14 +3,16 @@ import BeatLoader from "react-spinners/BeatLoader";
 
 const Spinner = ({ load }) => {
   return (
-    <BeatLoader
-    //   color="blue"
-      loading={load}
-      size={15}
-      aria-label="Loading Spinner"
-      data-testid="loader"
-      speedMultiplier={0.7}
-    />
+    <div className="text-center">
+      <BeatLoader
+      //   color="blue"
+        loading={load}
+        size={15}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+        speedMultiplier={0.7}
+      />
+    </div>
   );
 };
 Spinner.propTypes = {

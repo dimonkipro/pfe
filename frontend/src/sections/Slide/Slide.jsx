@@ -65,7 +65,7 @@ const Slide = () => {
         }}
       >
         <div
-          className="carousel-container"
+          className="carousel-container position-relative my-2"
           style={{
             display: "flex",
             gap: "0.5rem",
@@ -74,7 +74,7 @@ const Slide = () => {
           {products.map((product, index) => (
             <div
               key={`${product.name}-${index}`}
-              className="image-container-carousel"
+              className="image-container-carousel col-4 flex-shrink-0 rounded-3 my-1"
             >
               <img src={product.poster} alt={product.name} />
             </div>

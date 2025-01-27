@@ -1,52 +1,6 @@
-section {
-    margin: 1rem 0;
-
-}
-
-.product-hero {
-    position: sticky;
-    top: 0;
-    z-index: 90;
-    margin: 1rem;
-    height: 250vh;
-
-}
-
-.left {
-    min-width: 20rem;
-    text-align: center;
-
-}
-
-.left img {
-    width: 100%;
-    border-radius: 2rem;
-}
-
-.right {
-    padding: 0 1rem;
-    color: rgb(195, 193, 193);
-}
 
 .background {
     background: radial-gradient(circle, rgb(77, 77, 78) 0%, rgb(124, 123, 123) 73%, rgb(156, 156, 156) 100%);
     box-shadow: 0px 0px 12px #605858;
-    border-radius: 2rem;
     z-index: -1;
-    top: 10vh;
-    position: sticky;
-}
-
-
-.col-2 {
-    display: flex;
-    align-items: center;
-}
-
-.session-title {
-    text-align: center;
-    font-size: 3rem;
-    color: #c58c07;
-
-
 }

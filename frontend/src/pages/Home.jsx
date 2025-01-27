@@ -1,4 +1,4 @@
-import Footer from "../components/Footer/footer";
+import Footer from "../components/Footer";
 import Hero from "../sections/Hero/Hero";
 import ProductHero from "../sections/ProductHero/ProductHero";
 import RatingSlide from "../sections/RatingSlide/RatingSlide";

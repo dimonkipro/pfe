@@ -2,7 +2,7 @@
 import axios from "axios";
 import * as types from "../Const/actionTypes";
 
-const API_URL ="http://localhost:5000/api/auth"
+const API_URL = "http://localhost:5000/api/auth";
 
 axios.defaults.withCredentials = true;
 
@@ -106,3 +106,7 @@ export const resetPassword = (token, password) => async (dispatch) => {
     });
   }
 };
+
+export const clearNotifications = () => ({
+  type: "CLEAR_NOTIFICATIONS",
+});
