@@ -34,60 +34,89 @@ const SignUp = () => {
   }, [auth.notifications]);
 
   return (
-    <div className=" container col-6 mt-4">
+    <div className=" container col-5 mt-4">
       <form onSubmit={onSubmit}>
         <h1 className="text-center">Sign Up</h1>
 
         {/* EMAIL_FIELD */}
-        <div className="mb-3">
-          <label htmlFor="EmailInput" className="form-label">
-            Email Address
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            id="EmailInput"
-            placeholder="Enter a valid Email"
-            aria-describedby="emailHelp"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <div id="emailHelp" className="form-text">
-            We&apos;ll never share your email with anyone else.
+        <div className="mb-3 input-group">
+          <span className="input-group-text">
+            <img
+              width="24"
+              height="24"
+              src="https://img.icons8.com/material-rounded/24/new-post.png"
+              alt="new-post"
+            />
+          </span>
+          <div className="form-floating">
+            <input
+              type="email"
+              className="form-control"
+              id="EmailInput"
+              placeholder="Email address"
+              aria-describedby="emailHelp"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label htmlFor="EmailInput">Email Address</label>
+            <div id="emailHelp" className="form-text px-2">
+              We&apos;ll never share your email with anyone else (❁´◡`❁) .
+            </div>
           </div>
         </div>
 
         {/* NAME_FIELD */}
-        <div className="mb-3">
-          <label htmlFor="nameInput" className="form-label">
-            Full Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="nameInput"
-            placeholder="Enter your full name"
-            onChange={(e) => setName(e.target.value)}
-          />
+        <div className="mb-3 input-group">
+          <span className="input-group-text">
+            <img
+              width="24"
+              height="24"
+              src="https://img.icons8.com/glyph-neue/24/email-sign.png"
+              alt="email-sign"
+            />
+          </span>
+          <div className="form-floating">
+            <input
+              type="text"
+              className="form-control"
+              id="nameInput"
+              placeholder="Full name"
+              onChange={(e) => setName(e.target.value)}
+            />
+            <label htmlFor="nameInput">Full Name</label>
+          </div>
         </div>
 
         {/* PASSWORD_FIELD */}
-        <div className="mb-3">
-          <label htmlFor="PasswordInput" className="form-label">
-            Password
-          </label>
-          <input
-            type="password"
-            id="PasswordInput"
-            className="form-control"
-            placeholder="Choose a strong Password !"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <div className="mb-3 input-group">
+          <span className="input-group-text">
+            <img
+              width="24"
+              height="24"
+              src="https://img.icons8.com/ios-filled/24/password.png"
+              alt="password"
+            />
+            
+          </span>
+          <div className="form-floating">
+            <input
+              type="password"
+              id="PasswordInput"
+              className="form-control"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label htmlFor="PasswordInput">Password</label>
+          </div>
         </div>
-
-        <button type="submit" className="btn btn-warning mt-4">
-          Sign Up
-        </button>
-
+        <div className="text-center p-4 d-grid gap-2 col-10 mx-auto">
+          <button
+            type="submit"
+            className="btn btn-warning"
+            disabled={auth.isLoading}
+          >
+            {auth.isLoading ? "Signing Up..." : "Sign Up"}
+          </button>
+        </div>
         {auth.isLoading && <Spinner load={auth.isLoading} />}
         <ToastContainer />
       </form>

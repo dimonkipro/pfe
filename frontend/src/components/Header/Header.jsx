@@ -1,12 +1,17 @@
 import "./header.css";
 import logo from "../../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../Redux/Actions/authActions";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Get the current path without leading slash
+  const currentPath = window.location.pathname.replace(/^\/+/, "");
+
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     // Clear token from local storage
@@ -16,9 +21,6 @@ const Header = () => {
     // Redirect to login page
     navigate("/login");
   };
-
-  // Check if the user is logged in by checking for a token in localStorage
-  const isLoggedIn = !!localStorage.getItem("token");
 
   return (
     <nav className="navbar">
@@ -37,38 +39,54 @@ const Header = () => {
       </div>
       <div className="right-side">
         <li>
-          <a href="#">About</a>
+          <a className=" link-underline link-underline-opacity-0" href="#">
+            About
+          </a>
         </li>
         <li>
-          <a href="#">Shop</a>
+          <a className=" link-underline link-underline-opacity-0" href="#">
+            Shop
+          </a>
         </li>
         <li>
-          <a href="#">Cart</a>
+          <a className=" link-underline link-underline-opacity-0" href="#">
+            Cart
+          </a>
         </li>
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <>
             <li>
               <Link
                 to="/profile"
-                className="text-sm text-green-400 hover:underline"
+                className=" link-underline link-underline-opacity-0"
               >
                 Profile
               </Link>
             </li>
             <li>
-              <button
+              <Link
+                className="link-underline link-underline-opacity-0"
                 onClick={handleLogout}
-                className="text-sm text-red-400 hover:underline"
               >
                 Logout
-              </button>
+              </Link>
             </li>
           </>
+        ) : // Check if the current path is login or signup
+        currentPath == "login" ? (
+          <li>
+            <Link
+              to="/signup"
+              className=" link-underline link-underline-opacity-0"
+            >
+              Signup
+            </Link>
+          </li>
         ) : (
           <li>
             <Link
               to="/login"
-              className="text-sm text-green-400 hover:underline"
+              className=" link-underline link-underline-opacity-0"
             >
               Login
             </Link>

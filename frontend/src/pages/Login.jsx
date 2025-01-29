@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearNotifications,
-  login,
-} from "../Redux/Actions/authActions";
+import { clearNotifications, login } from "../Redux/Actions/authActions";
 import { Link, useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { toast, ToastContainer } from "react-toastify";
@@ -28,7 +25,6 @@ const Login = () => {
     dispatch(clearNotifications());
   }, [auth.notifications, dispatch]);
 
-  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -37,56 +33,82 @@ const Login = () => {
     dispatch(login(email, password, navigate));
   };
 
-
   return (
-    <div className=" container col-6 mt-4">
+    <div className=" container col-5 mt-4">
       <form onSubmit={onSubmit}>
         <h1 className="text-center">Login</h1>
 
         {/* EMAIL_FIELD */}
-        <div className="mb-3">
-          <label htmlFor="EmailInput" className="form-label">
-            Email address
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            id="EmailInput"
-            placeholder="Enter your Email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <div className="mb-3 input-group">
+          <span className="input-group-text">
+            <img
+              width="24"
+              height="24"
+              src="https://img.icons8.com/material-rounded/24/new-post.png"
+              alt="new-post"
+            />
+          </span>
+          <div className="form-floating">
+            <input
+              type="email"
+              className="form-control"
+              id="EmailInput"
+              placeholder="Enter your Email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label htmlFor="EmailInput" className="form-label">
+              Email address
+            </label>
+          </div>
         </div>
 
         {/* PASSWORD_FIELD */}
-        <div className="mb-3">
-          <label htmlFor="PasswordInput" className="form-label">
-            Password
-          </label>
-          <input
-            type="password"
-            id="PasswordInput"
-            className="form-control"
-            placeholder="Enter your Password !"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <div className="input-group">
+          <span className="input-group-text">
+         
+            <img
+              width="24"
+              height="24"
+              src="https://img.icons8.com/ios-filled/24/hiding.png"
+              alt="hiding"
+            />
+          </span>
+          <div className="form-floating">
+            <input
+              type="password"
+              id="PasswordInput"
+              className="form-control"
+              placeholder="Enter your Password !"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label htmlFor="PasswordInput" className="form-label">
+              Password
+            </label>
+          </div>
         </div>
 
         {/* LOG_IN_BUTTON */}
-        <button
-          type="submit"
-          className="btn btn-primary mt-4"
-          disabled={auth.isLoading}
-        >
-          {auth.isLoading ? "Logging in..." : "Login"}
-        </button>
+        <div className="text-center p-4 d-grid gap-2 col-10 mx-auto">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={auth.isLoading}
+          >
+            {auth.isLoading ? "Logging in..." : "Login"}
+          </button>
+        </div>
 
         {/* SPINNER_TOAST */}
         {auth.isLoading && <Spinner load={auth.isLoading} />}
 
         {/* SIGNUP_PAGE_BUTTON */}
-        <div className="text-end">
-          <p>Don&apos;t have an account ?</p>
-          <Link to="/signup" className="btn btn-success">
+        <div className="text-end p-2">
+          <p className="m-0">Don&apos;t have an account ?</p>
+          <Link
+            to="/signup"
+            className="link-secondary link-offset-2 link-underline-opacity-25
+             link-underline-opacity-100-hover"
+          >
             Signup
           </Link>
         </div>
