@@ -7,7 +7,9 @@ import pic from "../assets/image-7.png";
 import pic1 from "../assets/image-8.png";
 import pic2 from "../assets/image-4.png";
 
+
 const Home = () => {
+  
   return (
     <div style={{ overflow: "clip" }}>
       <Hero />

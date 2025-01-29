@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import "./App.css";
-import { Navigate, Route, Routes } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
@@ -9,19 +10,25 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import Header from "./components/Header/Header";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Spinner from "./components/Spinner";
 import { useEffect } from "react";
 import { checkAuth } from "./Redux/Actions/authActions";
-import Spinner from "./components/Spinner";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { user, isLoading, isAuthenticated } = useSelector(
+    (state) => state.auth
+  );
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isAuthenticated) navigate("/login");
+  }, [navigate, isAuthenticated]);
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+  if (isLoading) {
+    return <Spinner load={true} />;
   }
 
-  if (!user.isVerified) {
+  if (user && !user.isVerified) {
     return <Navigate to="/verify-email" replace />;
   }
 
@@ -38,34 +45,28 @@ const RedirectAuthenticatedUser = ({ children }) => {
 
   return children;
 };
-function App() {
-  const { isCheckingAuth } = useSelector((state) => state.auth);
-  useEffect(() => {
-    checkAuth();
-  }, []);
 
-  if (isCheckingAuth) return <Spinner load={true} />;
+function App() {
+  const { isLoading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return (
+      <div className="position-absolute top-50 start-50 translate-middle">Loading
+        <Spinner load={isLoading} />
+      </div>
+    );
+  }
+
   return (
     <div>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route
-          path="/signup"
-          element={
-            <RedirectAuthenticatedUser>
-              <SignUp />
-            </RedirectAuthenticatedUser>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
         <Route
           path="/login"
           element={
@@ -74,16 +75,28 @@ function App() {
             </RedirectAuthenticatedUser>
           }
         />
-        <Route path="/verify-email" element={<VerifyEmail />} />
 
         <Route
-          path="/forgot-password"
+          path="/signup"
           element={
             <RedirectAuthenticatedUser>
-              <ForgotPassword />
+              <SignUp />
             </RedirectAuthenticatedUser>
           }
         />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
         <Route
           path="/reset-password/:token"
           element={
@@ -92,6 +105,7 @@ function App() {
             </RedirectAuthenticatedUser>
           }
         />
+
         {/* catch all routes */}
         <Route
           path="*"

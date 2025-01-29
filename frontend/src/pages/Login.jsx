@@ -3,29 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   clearNotifications,
   login,
-  logout,
 } from "../Redux/Actions/authActions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { toast, ToastContainer } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    dispatch(login(email, password));
-  };
-
-  const handleLogout = () => {
-    dispatch(logout());
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // SHOW NOTIFICATIONS
+    if (auth.notifications.length === 0) return;
+
     auth.notifications.forEach(({ message, type }) => {
       toast[type](message, {
         autoClose: 5000,
@@ -35,12 +25,18 @@ const Login = () => {
         theme: "dark",
       });
     });
-
-    // CLEAR NOTIFICATIONS
-    if (auth.notifications.length > 0) {
-      dispatch(clearNotifications());
-    }
+    dispatch(clearNotifications());
   }, [auth.notifications, dispatch]);
+
+  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    dispatch(login(email, password, navigate));
+  };
+
 
   return (
     <div className=" container col-6 mt-4">
@@ -76,8 +72,12 @@ const Login = () => {
         </div>
 
         {/* LOG_IN_BUTTON */}
-        <button type="submit" className="btn btn-primary mt-4">
-          Login
+        <button
+          type="submit"
+          className="btn btn-primary mt-4"
+          disabled={auth.isLoading}
+        >
+          {auth.isLoading ? "Logging in..." : "Login"}
         </button>
 
         {/* SPINNER_TOAST */}
@@ -92,9 +92,6 @@ const Login = () => {
         </div>
       </form>
       <ToastContainer />
-      <button className="btn btn-danger" onClick={handleLogout}>
-        Logout
-      </button>
     </div>
   );
 };

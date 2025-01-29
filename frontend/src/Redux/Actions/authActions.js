@@ -5,8 +5,15 @@ import * as types from "../Const/actionTypes";
 const API_URL = "http://localhost:5000/api/auth";
 
 axios.defaults.withCredentials = true;
+// axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+//   "token"
+// )}`;
+const token = localStorage.getItem("token");
+if (token) {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+}
 
-export const signup = (email, password, name) => async (dispatch) => {
+export const signup = (email, password, name, navigate) => async (dispatch) => {
   dispatch({ type: types.SIGNUP_REQUEST });
   try {
     const response = await axios.post(`${API_URL}/signup`, {
@@ -15,6 +22,9 @@ export const signup = (email, password, name) => async (dispatch) => {
       name,
     });
     dispatch({ type: types.SIGNUP_SUCCESS, payload: response.data.user });
+    setTimeout(() => {
+      navigate("/login");
+    }, 0);
   } catch (error) {
     dispatch({
       type: types.SIGNUP_FAILURE,
@@ -23,11 +33,19 @@ export const signup = (email, password, name) => async (dispatch) => {
   }
 };
 
-export const login = (email, password) => async (dispatch) => {
+export const login = (email, password, navigate) => async (dispatch) => {
   dispatch({ type: types.LOGIN_REQUEST });
   try {
     const response = await axios.post(`${API_URL}/login`, { email, password });
-    dispatch({ type: types.LOGIN_SUCCESS, payload: response.data.user });
+    const { token, user } = response.data;
+
+    localStorage.setItem("token", token);
+
+    dispatch({ type: types.LOGIN_SUCCESS, payload: user, token });
+
+    setTimeout(() => {
+      navigate("/profile");
+    }, 0);
   } catch (error) {
     dispatch({
       type: types.LOGIN_FAILURE,
@@ -36,24 +54,19 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-export const logout = () => async (dispatch) => {
-  dispatch({ type: types.LOGOUT_REQUEST });
-  try {
-    await axios.post(`${API_URL}/logout`);
-    dispatch({ type: types.LOGOUT_SUCCESS });
-  } catch (error) {
-    dispatch({
-      type: types.LOGOUT_FAILURE,
-      payload: error.response?.data?.message || "Error logging out",
-    });
-  }
+export const logout = () => (dispatch) => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  delete axios.defaults.headers.common["Authorization"];
+  dispatch({ type: types.LOGOUT_SUCCESS });
 };
 
-export const verifyEmail = (code) => async (dispatch) => {
+export const verifyEmail = (code, navigate) => async (dispatch) => {
   dispatch({ type: types.VERIFY_EMAIL_REQUEST });
   try {
     const response = await axios.post(`${API_URL}/verify-email`, { code });
     dispatch({ type: types.VERIFY_EMAIL_SUCCESS, payload: response.data.user });
+    navigate("/profile");
   } catch (error) {
     dispatch({
       type: types.VERIFY_EMAIL_FAILURE,
@@ -67,8 +80,11 @@ export const checkAuth = () => async (dispatch) => {
   try {
     const response = await axios.get(`${API_URL}/check-auth`);
     dispatch({ type: types.CHECK_AUTH_SUCCESS, payload: response.data.user });
-  } catch {
-    dispatch({ type: types.CHECK_AUTH_FAILURE });
+  } catch (error) {
+    dispatch({
+      type: types.CHECK_AUTH_FAILURE,
+      payload: error.response?.data?.message || "Error checking auth",
+    });
   }
 };
 

@@ -1,8 +1,8 @@
 import * as types from "../Const/actionTypes";
 
 const initialState = {
-  user: null,
-  isAuthenticated: false,
+  user: JSON.parse(localStorage.getItem("user")) || null,
+  isAuthenticated: localStorage.getItem("token") ? true : false,
   isLoading: false,
   isCheckingAuth: false,
   message: null,
@@ -11,6 +11,7 @@ const initialState = {
 };
 
 const authReducer = (state = initialState, action) => {
+  // console.log(action.type, state);
   switch (action.type) {
     case types.SIGNUP_REQUEST:
     case types.LOGIN_REQUEST:
@@ -19,12 +20,12 @@ const authReducer = (state = initialState, action) => {
     case types.CHECK_AUTH_REQUEST:
     case types.FORGOT_PASSWORD_REQUEST:
     case types.RESET_PASSWORD_REQUEST:
-      return { ...state, isLoading: true, error: null };
+      return { ...state, isLoading: true, error: null};
 
-    case types.SIGNUP_SUCCESS:
+    
     case types.LOGIN_SUCCESS:
-    case types.VERIFY_EMAIL_SUCCESS:
-    case types.CHECK_AUTH_SUCCESS:
+      localStorage.setItem("user", JSON.stringify(action.payload));
+      localStorage.setItem("token", action.token);
       return {
         ...state,
         user: action.payload,
@@ -36,6 +37,23 @@ const authReducer = (state = initialState, action) => {
           { message: "Login successful!", type: "success" },
         ],
       };
+    case types.SIGNUP_SUCCESS:
+    case types.VERIFY_EMAIL_SUCCESS:
+    case types.CHECK_AUTH_SUCCESS:
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+        notifications: [
+          ...state.notifications,
+          { message: action.type, type: "success" },
+        ],
+      };
+
+    // case types.GET_CURRENT_SUCCESS:
+    //   return { ...state, user: action.payload, isAuthenticated: true };
 
     case types.LOGOUT_SUCCESS:
       return {
@@ -58,11 +76,13 @@ const authReducer = (state = initialState, action) => {
     case types.RESET_PASSWORD_FAILURE:
       return {
         ...state,
+        isAuthenticated: false,
+        user: null,
         isLoading: false,
         error: action.payload,
         notifications: [
           ...state.notifications,
-          { message: action.payload, type: "error" },
+          { message: action.type, type: "error" },
         ],
       };
 
@@ -84,6 +104,7 @@ const authReducer = (state = initialState, action) => {
     default:
       return state;
   }
+  
 };
 
 export default authReducer;

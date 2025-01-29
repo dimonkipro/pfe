@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearNotifications, signup } from "../Redux/Actions/authActions";
+import { signup } from "../Redux/Actions/authActions";
 import Spinner from "../components/Spinner";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -13,11 +16,12 @@ const SignUp = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(signup(email, password, name));
+    dispatch(signup(email, password, name, navigate));
   };
 
   useEffect(() => {
-    // SHOW NOTIFICATIONS
+    if (auth.notifications.length === 0) return;
+
     auth.notifications.forEach(({ message, type }) => {
       toast[type](message, {
         autoClose: 5000,
@@ -27,12 +31,7 @@ const SignUp = () => {
         theme: "dark",
       });
     });
-
-    // CLEAR NOTIFICATIONS
-    if (auth.notifications.length > 0) {
-      dispatch(clearNotifications());
-    }
-  }, [auth.notifications, dispatch]);
+  }, [auth.notifications]);
 
   return (
     <div className=" container col-6 mt-4">

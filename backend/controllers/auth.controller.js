@@ -104,7 +104,7 @@ export const login = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid credentials" });
+        .json({ success: false, message: "Invalid credential" });
     }
 
     // Check if account is locked
@@ -124,14 +124,18 @@ export const login = async (req, res) => {
       }
 
       await user.save();
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid credentials" });
+      return res.status(400).json({
+        success: false,
+        message: `Invalid credential you have ${
+          3 - user.loginAttempts
+        } more attempt(s)`,
+      });
     }
 
     // Reset login attempts on successful login
     user.loginAttempts = 0;
-    generateTokenAndSetCookie(res, user._id);
+    user.lockUntil = undefined;
+  const token = generateTokenAndSetCookie(res, user._id);
 
     user.lastLogin = new Date();
     await user.save();
@@ -139,6 +143,7 @@ export const login = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Logged in successfully",
+      token,
       user: {
         ...user._doc,
         password: undefined,
@@ -150,10 +155,6 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
-  res.clearCookie("token");
-  res.status(200).json({ success: true, message: "Logged out successfully" });
-};
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
@@ -236,6 +237,7 @@ export const checkAuth = async (req, res) => {
     }
 
     res.status(200).json({ success: true, user });
+    console.log("User found:", user);
   } catch (error) {
     console.log("Error in checkAuth ", error);
     res.status(400).json({ success: false, message: error.message });
