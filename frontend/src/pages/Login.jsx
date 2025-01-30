@@ -34,7 +34,7 @@ const Login = () => {
   };
 
   return (
-    <div className=" container col-5 mt-4">
+    <div className=" container col-5 mt-4 ">
       <form onSubmit={onSubmit}>
         <h1 className="text-center">Login</h1>
 
@@ -63,9 +63,8 @@ const Login = () => {
         </div>
 
         {/* PASSWORD_FIELD */}
-        <div className="input-group">
+        <div className="input-group mb-3">
           <span className="input-group-text">
-         
             <img
               width="24"
               height="24"
@@ -91,7 +90,7 @@ const Login = () => {
         <div className="text-center p-4 d-grid gap-2 col-10 mx-auto">
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-warning"
             disabled={auth.isLoading}
           >
             {auth.isLoading ? "Logging in..." : "Login"}
@@ -102,15 +101,26 @@ const Login = () => {
         {auth.isLoading && <Spinner load={auth.isLoading} />}
 
         {/* SIGNUP_PAGE_BUTTON */}
-        <div className="text-end p-2">
-          <p className="m-0">Don&apos;t have an account ?</p>
-          <Link
-            to="/signup"
-            className="link-secondary link-offset-2 link-underline-opacity-25
-             link-underline-opacity-100-hover"
-          >
-            Signup
-          </Link>
+        <div className="row">
+          <div className="col-4">
+            <Link
+              to="/forgot-password"
+              className="link-secondary link-offset-2 link-underline-opacity-25
+               link-underline-opacity-100-hover"
+            >
+              Forgot password ?
+            </Link>
+          </div>
+          <div className="col-8 text-end">
+            <p className="m-0">Don&apos;t have an account ?</p>
+            <Link
+              to="/signup"
+              className="link-secondary link-offset-2 link-underline-opacity-25
+               link-underline-opacity-100-hover"
+            >
+              Signup
+            </Link>
+          </div>
         </div>
       </form>
       <ToastContainer />

@@ -88,7 +88,7 @@ export const checkAuth = () => async (dispatch) => {
   }
 };
 
-export const forgotPassword = (email) => async (dispatch) => {
+export const forgotPassword = (email, navigate) => async (dispatch) => {
   dispatch({ type: types.FORGOT_PASSWORD_REQUEST });
   try {
     const response = await axios.post(`${API_URL}/forgot-password`, { email });
@@ -96,6 +96,7 @@ export const forgotPassword = (email) => async (dispatch) => {
       type: types.FORGOT_PASSWORD_SUCCESS,
       payload: response.data.message,
     });
+    navigate("/");
   } catch (error) {
     dispatch({
       type: types.FORGOT_PASSWORD_FAILURE,
@@ -105,23 +106,25 @@ export const forgotPassword = (email) => async (dispatch) => {
   }
 };
 
-export const resetPassword = (token, password) => async (dispatch) => {
-  dispatch({ type: types.RESET_PASSWORD_REQUEST });
-  try {
-    const response = await axios.post(`${API_URL}/reset-password/${token}`, {
-      password,
-    });
-    dispatch({
-      type: types.RESET_PASSWORD_SUCCESS,
-      payload: response.data.message,
-    });
-  } catch (error) {
-    dispatch({
-      type: types.RESET_PASSWORD_FAILURE,
-      payload: error.response?.data?.message || "Error resetting password",
-    });
-  }
-};
+export const resetPassword =
+  (token, password, navigate) => async (dispatch) => {
+    dispatch({ type: types.RESET_PASSWORD_REQUEST });
+    try {
+      const response = await axios.post(`${API_URL}/reset-password/${token}`, {
+        password,
+      });
+      dispatch({
+        type: types.RESET_PASSWORD_SUCCESS,
+        payload: response.data.message,
+      });
+      navigate("/login");
+    } catch (error) {
+      dispatch({
+        type: types.RESET_PASSWORD_FAILURE,
+        payload: error.response?.data?.message || "Error resetting password",
+      });
+    }
+  };
 
 export const clearNotifications = () => ({
   type: "CLEAR_NOTIFICATIONS",

@@ -12,7 +12,6 @@ import { log } from "console";
 
 export const signup = async (req, res) => {
   const { email, password, name } = req.body;
-  console.log("hello");
 
   try {
     if (!email || !password || !name) {
@@ -135,7 +134,7 @@ export const login = async (req, res) => {
     // Reset login attempts on successful login
     user.loginAttempts = 0;
     user.lockUntil = undefined;
-  const token = generateTokenAndSetCookie(res, user._id);
+    const token = generateTokenAndSetCookie(res, user._id);
 
     user.lastLogin = new Date();
     await user.save();
@@ -154,7 +153,6 @@ export const login = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
-
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;

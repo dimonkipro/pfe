@@ -1,25 +1,19 @@
 import "./header.css";
 import logo from "../../assets/logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../Redux/Actions/authActions";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+  const location = useLocation();
   // Get the current path without leading slash
-  const currentPath = window.location.pathname.replace(/^\/+/, "");
+  const currentPath = location.pathname.replace(/^\/+/, "");
 
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
-    // Clear token from local storage
-    localStorage.removeItem("token");
-    // Dispatch logout action
     dispatch(logout());
-    // Redirect to login page
-    navigate("/login");
   };
 
   return (
@@ -39,33 +33,41 @@ const Header = () => {
       </div>
       <div className="right-side">
         <li>
-          <a className=" link-underline link-underline-opacity-0" href="#">
+          <a
+            className="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+            href="#"
+          >
             About
           </a>
         </li>
         <li>
-          <a className=" link-underline link-underline-opacity-0" href="#">
+          <a className=" link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="#">
             Shop
-          </a>
-        </li>
-        <li>
-          <a className=" link-underline link-underline-opacity-0" href="#">
-            Cart
           </a>
         </li>
         {isAuthenticated ? (
           <>
             <li>
               <Link
+                to="/cart"
+                className=" link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+              >
+                Cart
+              </Link>
+            </li>
+
+            <li>
+              <Link
                 to="/profile"
-                className=" link-underline link-underline-opacity-0"
+                className=" link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
               >
                 Profile
               </Link>
             </li>
             <li>
               <Link
-                className="link-underline link-underline-opacity-0"
+                to="/login"
+                className="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                 onClick={handleLogout}
               >
                 Logout
@@ -77,7 +79,7 @@ const Header = () => {
           <li>
             <Link
               to="/signup"
-              className=" link-underline link-underline-opacity-0"
+              className=" link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
             >
               Signup
             </Link>
@@ -86,7 +88,7 @@ const Header = () => {
           <li>
             <Link
               to="/login"
-              className=" link-underline link-underline-opacity-0"
+              className=" link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
             >
               Login
             </Link>

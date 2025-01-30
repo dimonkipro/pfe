@@ -10,9 +10,6 @@ const Profile = () => {
     (state) => state.auth
   );
 
-
-
-
   const dispatch = useDispatch();
 
   useEffect(() => {

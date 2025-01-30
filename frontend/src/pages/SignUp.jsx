@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { signup } from "../Redux/Actions/authActions";
 import Spinner from "../components/Spinner";
 import { toast, ToastContainer } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -95,7 +95,6 @@ const SignUp = () => {
               src="https://img.icons8.com/ios-filled/24/password.png"
               alt="password"
             />
-            
           </span>
           <div className="form-floating">
             <input
@@ -118,6 +117,16 @@ const SignUp = () => {
           </button>
         </div>
         {auth.isLoading && <Spinner load={auth.isLoading} />}
+        <div className="d-flex justify-content-center">
+          <p className="m-0">Already have an account ?</p>
+          <Link
+            to="/login"
+            className="link-secondary link-offset-2 link-underline-opacity-25 
+            link-underline-opacity-100-hover"
+          >
+            Login
+          </Link>
+        </div>
         <ToastContainer />
       </form>
     </div>

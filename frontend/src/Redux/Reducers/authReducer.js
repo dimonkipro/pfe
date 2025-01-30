@@ -20,9 +20,8 @@ const authReducer = (state = initialState, action) => {
     case types.CHECK_AUTH_REQUEST:
     case types.FORGOT_PASSWORD_REQUEST:
     case types.RESET_PASSWORD_REQUEST:
-      return { ...state, isLoading: true, error: null};
+      return { ...state, isLoading: true, error: null };
 
-    
     case types.LOGIN_SUCCESS:
       localStorage.setItem("user", JSON.stringify(action.payload));
       localStorage.setItem("token", action.token);
@@ -82,7 +81,7 @@ const authReducer = (state = initialState, action) => {
         error: action.payload,
         notifications: [
           ...state.notifications,
-          { message: action.type, type: "error" },
+          { message: action.payload, type: "error" },
         ],
       };
 
@@ -94,7 +93,7 @@ const authReducer = (state = initialState, action) => {
         isLoading: false,
         notifications: [
           ...state.notifications,
-          { message: "Password changed successfully", type: "success" },
+          { message: action.type, type: "success" },
         ],
       };
 
@@ -104,7 +103,6 @@ const authReducer = (state = initialState, action) => {
     default:
       return state;
   }
-  
 };
 
 export default authReducer;

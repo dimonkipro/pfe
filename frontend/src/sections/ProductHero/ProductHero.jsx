@@ -2,6 +2,7 @@ import { useRef } from "react";
 import PropTypes from "prop-types";
 import "./productHero.css";
 import { useScroll, useTransform, motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const ProductHero = ({ from, to, title, startScale, endScale, pic }) => {
   const targetRef = useRef(null);
@@ -20,7 +21,7 @@ const ProductHero = ({ from, to, title, startScale, endScale, pic }) => {
     <section className="my-4">
       <div
         ref={targetRef}
-        className="position-sticky top-0 z-index-sticky col-12"
+        className="container position-sticky top-0 z-index-sticky col-12"
         style={{ height: "250vh" }}
       >
         <motion.div
@@ -31,10 +32,9 @@ const ProductHero = ({ from, to, title, startScale, endScale, pic }) => {
             preserveAspectRatio="none"
             viewBox="0 0 1200 120"
             xmlns="http://www.w3.org/2000/svg"
+            className="w-100 rounded-4"
             style={{
               fill: "#ffffff",
-              width: "100%",
-              borderRadius: "2rem",
             }}
           >
             <path
@@ -47,20 +47,28 @@ const ProductHero = ({ from, to, title, startScale, endScale, pic }) => {
             />
             <path d="M0 0v5.63C149.93 59 314.09 71.32 475.83 42.57c43-7.64 84.23-20.12 127.61-26.46 59-8.63 112.48 12.24 165.56 35.4C827.93 77.22 886 95.24 951.2 90c86.53-7 172.46-45.71 248.8-84.81V0z" />
           </svg>
-          <h1 className="text-center text-warning display-4 fw-bold">
+          <h1 className="text-center text-warning display-4 fw-bold p-4 mb-0">
             {title}
           </h1>
-          <div className="row">
-            <div className="col-8">
-              <h2>
+          <div className="row m-2 d-flex align-items-center">
+            <div className="col-8 p-1">
+              <h2 className="px-3 m-0">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
                 praesentium doloribus consequatur distinctio maiores tempore
                 quis,
               </h2>
-              <button>Click me</button>
+              <div className="text-end p-4">
+                <Link
+                  to="/your-route"
+                  className="fs-5 icon-link icon-link-hover link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
+                >
+                  Show more
+                  <i className="bi-arrow-right ms-2 "></i>
+                </Link>
+              </div>
             </div>
 
-            <div className="col-4">
+            <div className="col-4 d-flex justify-content-center p-3">
               <img src={pic} alt="..." className="img-fluid" />
             </div>
           </div>

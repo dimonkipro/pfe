@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
@@ -14,11 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 import Spinner from "./components/Spinner";
 import { useEffect } from "react";
 import { checkAuth } from "./Redux/Actions/authActions";
+import Cart from "./pages/Cart";
 
 const ProtectedRoute = ({ children }) => {
   const { user, isLoading, isAuthenticated } = useSelector(
     (state) => state.auth
   );
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!isAuthenticated) navigate("/login");
@@ -56,7 +59,8 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="position-absolute top-50 start-50 translate-middle">Loading
+      <div className="position-absolute top-50 start-50 translate-middle">
+        Loading
         <Spinner load={isLoading} />
       </div>
     );
@@ -85,12 +89,19 @@ function App() {
           }
         />
         <Route path="/verify-email" element={<VerifyEmail />} />
-
         <Route
           path="/profile"
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
             </ProtectedRoute>
           }
         />
