@@ -18,7 +18,7 @@ const Profile = () => {
     notifications.forEach(({ message, type }) => {
       toast[type](message, {
         autoClose: 5000,
-        position: "top-right",
+        position: "bottom-right",
         draggable: true,
         closeOnClick: true,
         theme: "dark",

@@ -15,14 +15,15 @@ const Hero = () => {
   });
 
   return (
-    <motion.section ref={targetRef} style={{ opacity, minHeight: "120vh" }}>
+    <motion.section ref={targetRef} style={{ opacity, height: "100vh" }}>
       <motion.div
         style={{
           left: "40%",
           scale,
           position,
           fontSize: "2rem",
-        }} className="mt-5"
+        }}
+        className="mt-5"
       >
         <h1>Hero Section</h1>
         <h1>Hero Section</h1>

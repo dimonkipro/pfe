@@ -25,7 +25,7 @@ const SignUp = () => {
     auth.notifications.forEach(({ message, type }) => {
       toast[type](message, {
         autoClose: 5000,
-        position: "top-right",
+        position: "bottom-right",
         draggable: true,
         closeOnClick: true,
         theme: "dark",
@@ -41,12 +41,7 @@ const SignUp = () => {
         {/* EMAIL_FIELD */}
         <div className="mb-3 input-group">
           <span className="input-group-text">
-            <img
-              width="24"
-              height="24"
-              src="https://img.icons8.com/material-rounded/24/new-post.png"
-              alt="new-post"
-            />
+            <i className="bi bi-envelope-at h4"></i>
           </span>
           <div className="form-floating">
             <input
@@ -67,12 +62,13 @@ const SignUp = () => {
         {/* NAME_FIELD */}
         <div className="mb-3 input-group">
           <span className="input-group-text">
-            <img
+            {/* <img
               width="24"
               height="24"
               src="https://img.icons8.com/glyph-neue/24/email-sign.png"
               alt="email-sign"
-            />
+            /> */}
+            <i className="bi bi-person-vcard h4"></i>
           </span>
           <div className="form-floating">
             <input
@@ -89,12 +85,13 @@ const SignUp = () => {
         {/* PASSWORD_FIELD */}
         <div className="mb-3 input-group">
           <span className="input-group-text">
-            <img
+            {/* <img
               width="24"
               height="24"
               src="https://img.icons8.com/ios-filled/24/password.png"
               alt="password"
-            />
+            /> */}
+            <i className="bi bi-incognito h4"></i>
           </span>
           <div className="form-floating">
             <input

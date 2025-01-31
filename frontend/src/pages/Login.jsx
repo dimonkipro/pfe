@@ -16,7 +16,7 @@ const Login = () => {
     auth.notifications.forEach(({ message, type }) => {
       toast[type](message, {
         autoClose: 5000,
-        position: "top-right",
+        position: "bottom-right",
         draggable: true,
         closeOnClick: true,
         theme: "dark",
@@ -41,12 +41,7 @@ const Login = () => {
         {/* EMAIL_FIELD */}
         <div className="mb-3 input-group">
           <span className="input-group-text">
-            <img
-              width="24"
-              height="24"
-              src="https://img.icons8.com/material-rounded/24/new-post.png"
-              alt="new-post"
-            />
+            <i className="bi bi-envelope h4"></i>
           </span>
           <div className="form-floating">
             <input
@@ -65,12 +60,13 @@ const Login = () => {
         {/* PASSWORD_FIELD */}
         <div className="input-group mb-3">
           <span className="input-group-text">
-            <img
+            {/* <img
               width="24"
               height="24"
               src="https://img.icons8.com/ios-filled/24/hiding.png"
               alt="hiding"
-            />
+            /> */}
+            <i className="bi bi-incognito h4"></i>
           </span>
           <div className="form-floating">
             <input

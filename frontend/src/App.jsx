@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";

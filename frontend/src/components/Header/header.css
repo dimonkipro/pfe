@@ -1,28 +1,5 @@
-nav {
-    position: sticky;
-    top: 0;
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 999;
-}
-
-
 .logo {
     width: 4rem;
-}
-
-.right-side {
-    display: flex;
-    list-style: none;
-    justify-content: space-between;
-}
-
-.right-side li {
-    margin: auto 1rem;
 }
 
 .input {

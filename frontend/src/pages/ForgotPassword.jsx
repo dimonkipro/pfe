@@ -26,7 +26,7 @@ const ForgotPassword = () => {
     auth.notifications.forEach(({ message, type }) => {
       toast[type](message, {
         autoClose: 5000,
-        position: "top-right",
+        position: "bottom-right",
         draggable: true,
         closeOnClick: true,
         theme: "dark",
@@ -43,12 +43,13 @@ const ForgotPassword = () => {
         {/* EMAIL_FIELD */}
         <div className="mb-3 input-group">
           <span className="input-group-text">
-            <img
+            {/* <img
               width="24"
               height="24"
               src="https://img.icons8.com/material-rounded/24/new-post.png"
               alt="new-post"
-            />
+            /> */}
+            <i className="bi bi-envelope-fill h4"></i>
           </span>
           <div className="form-floating">
             <input
@@ -57,6 +58,7 @@ const ForgotPassword = () => {
               id="EmailInput"
               placeholder="Enter your Email"
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
             <label htmlFor="EmailInput" className="form-label">
               Email address

@@ -54,11 +54,12 @@ export const login = (email, password, navigate) => async (dispatch) => {
   }
 };
 
-export const logout = () => (dispatch) => {
+export const logout = (navigate) => (dispatch) => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
   delete axios.defaults.headers.common["Authorization"];
   dispatch({ type: types.LOGOUT_SUCCESS });
+  navigate("/login");
 };
 
 export const verifyEmail = (code, navigate) => async (dispatch) => {
