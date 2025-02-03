@@ -44,7 +44,13 @@ export const login = (email, password, navigate) => async (dispatch) => {
     dispatch({ type: types.LOGIN_SUCCESS, payload: user, token });
 
     setTimeout(() => {
-      navigate("/profile");
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (user.role === "trainer") {
+        navigate("/trainer");
+      } else {
+        navigate("/profile");
+      }
     }, 0);
   } catch (error) {
     dispatch({
@@ -85,6 +91,23 @@ export const checkAuth = () => async (dispatch) => {
     dispatch({
       type: types.CHECK_AUTH_FAILURE,
       payload: error.response?.data?.message || "Error checking auth",
+    });
+  }
+};
+
+export const checkAdmin = () => async (dispatch) => {
+  dispatch({ type: types.CHECK_AUTH_REQUEST });
+
+  try {
+    const response = await axios.get(`${API_URL}/admin`);
+    dispatch({
+      type: types.CHECK_AUTH_SUCCESS,
+      payload: response.data.user,
+    });
+  } catch (error) {
+    dispatch({
+      type: types.CHECK_AUTH_FAILURE,
+      payload: error.response?.data?.message || "Failed to check admin status",
     });
   }
 };

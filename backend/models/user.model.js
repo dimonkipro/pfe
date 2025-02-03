@@ -15,6 +15,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    img: { type: String },
+    role: { type: String, enum: ["trainer", "user", "admin"] },
     lastLogin: {
       type: Date,
       default: Date.now,

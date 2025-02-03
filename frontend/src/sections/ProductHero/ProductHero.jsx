@@ -59,7 +59,7 @@ const ProductHero = ({ from, to, title, startScale, endScale, pic }) => {
               </h2>
               <div className="text-end p-4">
                 <Link
-                  to="/your-route"
+                  to="/"
                   className="fs-5 icon-link icon-link-hover link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                 >
                   Show more

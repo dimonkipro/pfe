@@ -1,38 +1,35 @@
-import { useEffect, useState } from "react";
 import { NavDropdown } from "react-bootstrap";
 
-const DarkModeToggle = () => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+// eslint-disable-next-line react/prop-types
+const DarkModeToggle = ({ drop }) => {
+  // Read the current theme from localStorage.
+  const currentTheme = localStorage.getItem("theme") || "light";
 
-  useEffect(() => {
-    document.body.setAttribute("data-bs-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+  // Function to update theme and refresh page
+  const handleThemeChange = (newTheme) => {
+    localStorage.setItem("theme", newTheme);
+    window.location.reload();
+  };
 
   return (
     <NavDropdown
       title={
-        theme === "dark" ? (
-          <i className="bi bi-moon-fill "></i>
+        currentTheme === "dark" ? (
+          <i className="bi bi-moon-fill h4"></i>
         ) : (
-          <i className="bi bi-sun-fill "></i>
+          <i className="bi bi-sun-fill h4"></i>
         )
       }
-      drop="down-centered"
+      drop= {drop}
       className="mx-2"
     >
-      <NavDropdown.Item
-        onClick={() => setTheme(theme === "light" ? "dark" : "dark")}
-      >
+      <NavDropdown.Item onClick={() => handleThemeChange("dark")}>
         <i className="bi bi-moon-fill"></i> Dark
       </NavDropdown.Item>
 
       <NavDropdown.Divider />
 
-      <NavDropdown.Item
-        className="link-warning"
-        onClick={() => setTheme(theme === "dark" ? "light" : "light")}
-      >
+      <NavDropdown.Item onClick={() => handleThemeChange("light")}>
         <i className="bi bi-sun-fill"></i> Light
       </NavDropdown.Item>
     </NavDropdown>

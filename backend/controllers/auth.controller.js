@@ -1,6 +1,6 @@
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
-import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
+import { generateToken } from "../utils/generateToken.js";
 import {
   sendPasswordResetEmail,
   sendResetSuccessEmail,
@@ -8,7 +8,6 @@ import {
   sendWelcomeEmail,
 } from "../mailtrap/emails.js";
 import { User } from "../models/user.model.js";
-import { log } from "console";
 
 export const signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -43,7 +42,7 @@ export const signup = async (req, res) => {
     await user.save();
 
     // jwt
-    generateTokenAndSetCookie(res, user._id);
+    generateToken(res, user._id);
 
     await sendVerificationEmail(user.email, verificationToken);
 
@@ -134,7 +133,7 @@ export const login = async (req, res) => {
     // Reset login attempts on successful login
     user.loginAttempts = 0;
     user.lockUntil = undefined;
-    const token = generateTokenAndSetCookie(res, user._id);
+    const token = generateToken(res, user._id);
 
     user.lastLogin = new Date();
     await user.save();
@@ -240,4 +239,13 @@ export const checkAuth = async (req, res) => {
     console.log("Error in checkAuth ", error);
     res.status(400).json({ success: false, message: error.message });
   }
+};
+
+export const adminCheckAuth = async (req, res) => {
+  // User is already attached by checkAdmin middleware
+  console.log("checkadminauth");
+  
+  res.status(200).json({ success: true, user: req.user });
+  console.log("req",req.user);
+  
 };

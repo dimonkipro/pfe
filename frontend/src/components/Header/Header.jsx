@@ -1,9 +1,9 @@
 import "./header.css";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo1.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../Redux/Actions/authActions";
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap"; // Import Bootstrap components
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import DarkModeToggle from "./DarkModeToggle";
 
 const Header = () => {
@@ -11,7 +11,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname.replace(/^\/+/, "");
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout(navigate));
@@ -20,6 +20,7 @@ const Header = () => {
   return (
     <Navbar expand="lg" sticky="top" className="container col-10">
       <Container fluid>
+        {/* Logo */}
         <Navbar.Brand as={Link} to="/">
           <img src={logo} alt="Logo" className="logo" />
         </Navbar.Brand>
@@ -34,9 +35,10 @@ const Header = () => {
           />
         </div>
 
-        {/* RIGHT_SIDE */}
-        <DarkModeToggle />
-        <Navbar.Toggle aria-controls="navbar-expand"/>
+        {/* DARK MODE TOGGLE */}
+        <DarkModeToggle drop="down-centered" />
+
+        <Navbar.Toggle aria-controls="navbar-expand" />
         <Navbar.Collapse id="navbar-expand" className="flex-grow-0">
           <Nav>
             <Nav.Link
@@ -46,76 +48,116 @@ const Header = () => {
             >
               About
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/shop"
-              className="link-warning link-opacity-100 link-opacity-50-hover mx-2"
-            >
-              Shop
-            </Nav.Link>
-            {isAuthenticated ? (
+
+            {isAuthenticated &&
+            (user?.role === "admin" || user?.role === "trainer") ? (
+              // For authenticated admin users
+              <NavDropdown
+                title={
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="25"
+                    fill="currentColor"
+                    className="bi bi-person-lines-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
+                  </svg>
+                }
+                menuVariant="light"
+                drop="down-centered"
+              >
+                <NavDropdown.Item
+                  as={Link}
+                  to={
+                    user?.role === "admin"
+                      ? "/admin/dashboard"
+                      : user?.role === "trainer"
+                      ? "/trainer/dashboard"
+                      : null
+                  }
+                  className="link-warning"
+                >
+                  Dashboard
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item
+                  onClick={handleLogout}
+                  className="link-danger"
+                >
+                  Logout <i className="bi bi-box-arrow-right"></i>
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : (
+              // For non-admin users
               <>
                 <Nav.Link
                   as={Link}
-                  to="/cart"
+                  to="/shop"
                   className="link-warning link-opacity-100 link-opacity-50-hover mx-2"
                 >
-                  Cart
+                  Shop
                 </Nav.Link>
-
-                {/* Dropdown for Profile and Logout */}
-                <NavDropdown
-                  title={
-                    <>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="25"
-                        height="25"
-                        fill="currentColor"
-                        className="bi bi-person-lines-fill"
-                        viewBox="0 0 16 16"
+                {isAuthenticated ? (
+                  <>
+                    <Nav.Link
+                      as={Link}
+                      to="/cart"
+                      className="link-warning link-opacity-100 link-opacity-50-hover mx-2"
+                    >
+                      Cart
+                    </Nav.Link>
+                    <NavDropdown
+                      title={
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="25"
+                          height="25"
+                          fill="currentColor"
+                          className="bi bi-person-lines-fill"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
+                        </svg>
+                      }
+                      menuVariant="light"
+                      drop="down-centered"
+                    >
+                      <NavDropdown.Item
+                        as={Link}
+                        to="/profile"
+                        className="link-warning"
                       >
-                        <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
-                      </svg>
-                    </>
-                  }
-                  menuVariant="light"
-                  drop="down-centered"
-                >
-                  <NavDropdown.Item
+                        Profile
+                      </NavDropdown.Item>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item
+                        onClick={handleLogout}
+                        className="link-danger"
+                      >
+                        Logout <i className="bi bi-box-arrow-right"></i>
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                  </>
+                ) : currentPath === "login" ? (
+                  <Nav.Link
                     as={Link}
-                    to="/profile"
-                    className="link-warning"
+                    to="/signup"
+                    className="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mx-2"
                   >
-                    Profile
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item
-                    onClick={handleLogout}
-                    className="link-danger"
+                    Signup
+                  </Nav.Link>
+                ) : (
+                  <Nav.Link
+                    as={Link}
+                    to="/login"
+                    className="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover mx-2"
                   >
-                    Logout <i className="bi bi-box-arrow-right"></i>
-                  </NavDropdown.Item>
-                </NavDropdown>
+                    Login
+                  </Nav.Link>
+                )}
               </>
-            ) : currentPath === "login" ? (
-              <Nav.Link
-                as={Link}
-                to="/signup"
-                className="link-warning link-offset-2 link-underline-opacity-25 
-                link-underline-opacity-100-hover mx-2"
-              >
-                Signup
-              </Nav.Link>
-            ) : (
-              <Nav.Link
-                as={Link}
-                to="/login"
-                className="link-warning link-offset-2 link-underline-opacity-25 
-                link-underline-opacity-100-hover mx-2"
-              >
-                Login
-              </Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>

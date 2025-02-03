@@ -1,7 +1,8 @@
 import * as types from "../Const/actionTypes";
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem("user")) || null,
+  // user: JSON.parse(localStorage.getItem("user")) || null,
+  user: null,
   isAuthenticated: localStorage.getItem("token") ? true : false,
   isLoading: false,
   isCheckingAuth: false,
@@ -23,8 +24,7 @@ const authReducer = (state = initialState, action) => {
       return { ...state, isLoading: true, error: null };
 
     case types.LOGIN_SUCCESS:
-      localStorage.setItem("user", JSON.stringify(action.payload));
-      localStorage.setItem("token", action.token);
+
       return {
         ...state,
         user: action.payload,
@@ -50,9 +50,6 @@ const authReducer = (state = initialState, action) => {
           { message: action.type, type: "success" },
         ],
       };
-
-    // case types.GET_CURRENT_SUCCESS:
-    //   return { ...state, user: action.payload, isAuthenticated: true };
 
     case types.LOGOUT_SUCCESS:
       return {

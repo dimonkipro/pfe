@@ -1,9 +1,8 @@
-/* eslint-disable react/prop-types */
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
@@ -17,47 +16,30 @@ import Spinner from "./components/Spinner";
 import { useEffect } from "react";
 import { checkAuth } from "./Redux/Actions/authActions";
 import Cart from "./pages/Cart";
-
-const ProtectedRoute = ({ children }) => {
-  const { user, isLoading, isAuthenticated } = useSelector(
-    (state) => state.auth
-  );
-
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!isAuthenticated) navigate("/login");
-  }, [navigate, isAuthenticated]);
-
-  if (isLoading) {
-    return <Spinner load={true} />;
-  }
-
-  if (user && !user.isVerified) {
-    return <Navigate to="/verify-email" replace />;
-  }
-
-  return children;
-};
-
-// redirect authenticated users to the home page
-const RedirectAuthenticatedUser = ({ children }) => {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
-
-  if (isAuthenticated && user.isVerified) {
-    return <Navigate to="/" replace />;
-  }
-
-  return children;
-};
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import ProtectedRoute from "./components/Routes/ProtectedRoute";
+import AdminRoute from "./components/Routes/AdminRoute";
+import RedirectAuthenticatedUser from "./components/Routes/RedirectAuthenticatedUser";
+import AdminLayout from "./pages/Admin/AdminLayout";
+import TrainerRoute from "./components/Routes/TrainerRoute";
+import TrainerDashboard from "./pages/Trainer/TrainerDashboard";
 
 function App() {
   const { isLoading } = useSelector((state) => state.auth);
+  const theme = localStorage.getItem("theme");
   const dispatch = useDispatch();
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  const isTrainerRoute = location.pathname.startsWith("/trainer");
 
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
 
+  useEffect(() => {
+    document.body.setAttribute("data-bs-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
   if (isLoading) {
     return (
       <div className="position-absolute top-50 start-50 translate-middle">
@@ -68,9 +50,45 @@ function App() {
   }
 
   return (
-    <div>
-      <Header />
+    <div className={!isAdminRoute ? "container col-10" : ""}>
+      {/* {(!isAdminRoute || !isTrainerRoute) && <Header />} */}
+      {!isAdminRoute && !isTrainerRoute && <Header />}
       <Routes>
+        {/* Admin Routes */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <AdminLayout />
+              </AdminRoute>
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          {/* <Route path="users" element={<AdminUsers />} />
+          <Route path="products" element={<AdminProducts />} /> */}
+        </Route>
+
+        {/* Trainer Routes */}
+        <Route
+          path="/trainer"
+          element={
+            <ProtectedRoute>
+              <TrainerRoute>
+                <AdminLayout />
+              </TrainerRoute>
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<TrainerDashboard />} />
+          <Route path="dashboard" element={<TrainerDashboard />} />
+          {/* <Route path="users" element={<AdminUsers />} />
+          <Route path="products" element={<AdminProducts />} /> */}
+        </Route>
+
+        {/* Public routes */}
         <Route path="/" element={<Home />} />
         <Route
           path="/login"
@@ -122,7 +140,7 @@ function App() {
         <Route
           path="*"
           element={
-            <p className="display-1 text-center fw-bold position-absolute top-50 start-50 translate-middle ">
+            <p className="container display-1 text-center fw-bold position-absolute top-50 start-50 translate-middle ">
               (❁´⁔`❁) <br /> 404 Page Not Found
             </p>
           }

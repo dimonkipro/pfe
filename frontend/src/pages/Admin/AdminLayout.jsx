@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
-import { clearNotifications } from "../Redux/Actions/authActions";
+import Sidebar from "../../components/Sidebar";
+import { clearNotifications } from "../../Redux/Actions/authActions";
+import { Outlet } from "react-router-dom";
 
-const Profile = () => {
-  const { notifications, user, isAuthenticated } = useSelector(
-    (state) => state.auth
-  );
-
+const AdminLayout = () => {
+  const { notifications } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,17 +24,18 @@ const Profile = () => {
     dispatch(clearNotifications());
   }, [notifications, dispatch]);
 
-
   return (
-    <div>
-      {isAuthenticated ? (
-        <h1>Welcome, {user?.name}</h1>
-      ) : (
-        <h1>You are not logged in</h1>
-      )}
-      <ToastContainer />
-    </div>
+    <>
+      <Sidebar />
+      <div className="d-flex">
+        <div className="main-content flex-grow-1 p-2 ms-sm-5">
+        {/* <div className="main-content flex-grow-1 p-4 bg-dark-subtle"> */}
+          <Outlet />
+          <ToastContainer />
+        </div>
+      </div>
+    </>
   );
 };
 
-export default Profile;
+export default AdminLayout;
