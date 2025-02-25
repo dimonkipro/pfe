@@ -2,7 +2,7 @@ import { User } from "../models/user.model.js";
 
 export const isAdmin = async (req, res, next) => {
   try {
-    // Fetch user without password
+    // Fetch user without password 
     const user = await User.findById(req.userId).select("-password");
 
     if (!user) {
